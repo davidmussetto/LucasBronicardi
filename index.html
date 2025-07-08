@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Login Seguro</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #0f2027;  /* fallback for old browsers */
+      background: linear-gradient(to right, #2c5364, #203a43, #0f2027);
+      color: white;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    .login-box {
+      background-color: #1e1e2f;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.5);
+      text-align: center;
+    }
+
+    .login-box input {
+      display: block;
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
+      border: none;
+      border-radius: 5px;
+      font-size: 16px;
+    }
+
+    .login-box button {
+      padding: 10px 20px;
+      border: none;
+      background-color: #00adb5;
+      color: white;
+      font-size: 16px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .encrypting {
+      margin-top: 20px;
+      font-size: 18px;
+      color: #00ffcc;
+      display: none;
+    }
+
+    .dot-flashing {
+      display: inline-block;
+      width: 1em;
+      height: 1em;
+      border-radius: 50%;
+      background-color: #00ffcc;
+      animation: dotFlashing 1s infinite linear alternate;
+      margin-left: 5px;
+    }
+
+    @keyframes dotFlashing {
+      0% { background-color: #00ffcc; }
+      50% { background-color: transparent; }
+      100% { background-color: #00ffcc; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="login-box">
+  <h2>Iniciar sesión</h2>
+  <input type="text" id="usuario" placeholder="Usuario">
+  <input type="password" id="contrasena" placeholder="Contraseña">
+  <button onclick="verificar()">Ingresar</button>
+  <div class="encrypting" id="encrypting">
+    Encriptando<span class="dot-flashing"></span>
+  </div>
+</div>
+
+<script>
+  function verificar() {
+    const usuario = document.getElementById('usuario').value;
+    const contrasena = document.getElementById('contrasena').value;
+    const animacion = document.getElementById('encrypting');
+
+    // Usuario y contraseña fijos
+    if (usuario === "lucas" && contrasena === "lucas1234") {
+      animacion.style.display = "block";
+
+      // Simulación de encriptación con animación
+      setTimeout(() => {
+        window.location.href = "formulario.html";
+      }, 3000); // Espera 3 segundos antes de redirigir
+    } else {
+      alert("Usuario o contraseña incorrectos.");
+    }
+  }
+</script>
+
+</body>
+</html>
