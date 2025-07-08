@@ -133,26 +133,46 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
 <script>
-  // Temporizador de 30 minutos
-  setTimeout(() => {
-    alert("El tiempo ha expirado. Serás redirigido al inicio.");
-    window.location.href = "index.html";
-  }, 1800000);
-
-  // Función para generar PDF
+  // Función para generar PDF con mejor precisión visual
   function descargarPDF() {
-    const element = document.getElementById("formulario");
+    const original = document.getElementById("formulario");
+
+    // Clonar el formulario para exportarlo sin modificar el DOM original
+    const copia = original.cloneNode(true);
+
+    // Opciones de configuración
     const opt = {
-      margin:       0.5,
+      margin:       [0.2, 0.2, 0.2, 0.2],  // márgenes: top, left, bottom, right
       filename:     'formulario-asistencia.pdf',
       image:        { type: 'jpeg', quality: 0.98 },
-      html2canvas:  { scale: 2 },
-      jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
+      html2canvas:  {
+        scale: 2,
+        useCORS: true,
+        scrollY: 0,
+        scrollX: 0
+      },
+      jsPDF: {
+        unit: 'cm',
+        format: 'a4',
+        orientation: 'portrait'
+      }
     };
 
-    html2pdf().set(opt).from(element).save();
+    // Crear un contenedor invisible para el clon
+    const contenedorTemp = document.createElement("div");
+    contenedorTemp.style.position = "absolute";
+    contenedorTemp.style.left = "-9999px";
+    contenedorTemp.appendChild(copia);
+    document.body.appendChild(contenedorTemp);
+
+    // Exportar el clon
+    html2pdf().set(opt).from(copia).save().then(() => {
+      // Eliminar el clon invisible
+      document.body.removeChild(contenedorTemp);
+    });
   }
 </script>
+
 
 
 </body>
