@@ -133,44 +133,62 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
 <script>
-  // Función para generar PDF con mejor precisión visual
   function descargarPDF() {
-    const original = document.getElementById("formulario");
+  const original = document.getElementById("formulario");
 
-    // Clonar el formulario para exportarlo sin modificar el DOM original
-    const copia = original.cloneNode(true);
+  // Clonar el formulario
+  const copia = original.cloneNode(true);
 
-    // Opciones de configuración
-    const opt = {
-      margin:       [0.2, 0.2, 0.2, 0.2],  // márgenes: top, left, bottom, right
-      filename:     'formulario-asistencia.pdf',
-      image:        { type: 'jpeg', quality: 0.98 },
-      html2canvas:  {
-        scale: 2,
-        useCORS: true,
-        scrollY: 0,
-        scrollX: 0
-      },
-      jsPDF: {
-        unit: 'cm',
-        format: 'a4',
-        orientation: 'portrait'
-      }
-    };
+  // Reemplazar los textareas por elementos div con su contenido como texto
+  const textareas = original.querySelectorAll("textarea");
+  const textareasClon = copia.querySelectorAll("textarea");
 
-    // Crear un contenedor invisible para el clon
-    const contenedorTemp = document.createElement("div");
-    contenedorTemp.style.position = "absolute";
-    contenedorTemp.style.left = "-9999px";
-    contenedorTemp.appendChild(copia);
-    document.body.appendChild(contenedorTemp);
+  textareasClon.forEach((textarea, index) => {
+    const valor = textareas[index].value;
 
-    // Exportar el clon
-    html2pdf().set(opt).from(copia).save().then(() => {
-      // Eliminar el clon invisible
-      document.body.removeChild(contenedorTemp);
-    });
-  }
+    const div = document.createElement("div");
+    div.style.whiteSpace = "pre-wrap";
+    div.style.border = "1px solid #aaa";
+    div.style.borderRadius = "4px";
+    div.style.backgroundColor = "#f0f0f0";
+    div.style.padding = "6px 8px";
+    div.style.minHeight = "180px";
+    div.textContent = valor;
+
+    textarea.parentNode.replaceChild(div, textarea);
+  });
+
+  // Opciones de configuración
+  const opt = {
+    margin:       [0.2, 0.2, 0.2, 0.2],
+    filename:     'formulario-asistencia.pdf',
+    image:        { type: 'jpeg', quality: 0.98 },
+    html2canvas:  {
+      scale: 2,
+      useCORS: true,
+      scrollY: 0,
+      scrollX: 0
+    },
+    jsPDF: {
+      unit: 'cm',
+      format: 'a4',
+      orientation: 'portrait'
+    }
+  };
+
+  // Crear un contenedor invisible
+  const contenedorTemp = document.createElement("div");
+  contenedorTemp.style.position = "absolute";
+  contenedorTemp.style.left = "-9999px";
+  contenedorTemp.appendChild(copia);
+  document.body.appendChild(contenedorTemp);
+
+  // Generar el PDF
+  html2pdf().set(opt).from(copia).save().then(() => {
+    document.body.removeChild(contenedorTemp);
+  });
+}
+
 </script>
 
 
